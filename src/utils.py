@@ -53,11 +53,15 @@ def greetings(time):
 # greeting = greetings(now)
 # print(greeting)
 
-def read_excel_file(excel_path: str):
+def read_excel_file(excel_path: str) -> list[dict]:
     """Функция считывает финансовые операции из Excel - файла и выдает список
     словарей с транзакциями."""
-    df_excel = pd.read_excel(excel_path)
-    return df_excel
+    try:
+        df_excel = pd.read_excel(excel_path)
+        df_dict_excel = df_excel.to_dict(orient="records")
+        return df_dict_excel
+    except Exception:
+        return []
 
 operations = read_excel_file("../data/operations.xlsx")
 
@@ -90,7 +94,7 @@ def top_five_transactions(operations: pd.DataFrame) -> list[dict]:
     return list_top_transactions
 # pprint.pprint(top_five_transactions(operations))
 
-with open('../data/user_settings.json', 'r', encoding='utf-8') as file:
+with open('C:/Users/i3/my_pj/Kursovoy_Project1/data/user_settings.json', 'r', encoding='utf-8') as file:
     json_data = json.load(file)
 
 values_to_request = ", ".join(json_data ["user_currencies"])
