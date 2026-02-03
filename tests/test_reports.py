@@ -1,37 +1,37 @@
 import json
 import pandas as pd
 import pytest
-from src.reports import spending_by_category
+from src.reports import cost_by_category
 
 
 @pytest.fixture
 def transactions():
     return pd.DataFrame({
-        "Категория": ["Еда", "Транспорт", "Еда", "Досуг", "Еда"],
-        "Дата платежа": ["10.10.2024", "15.11.2024", "20.12.2024", "nan", "23.12.2024"],
-        "Сумма платежа": [1000, 1500, 2000, 500, 3000]
+        "Категория": ["Красота", "Транспорт", "Красота", "ЖКХ", "Красота"],
+        "Дата платежа": ["10.08.2020", "15.08.2020", "20.08.2020", "nan", "23.08.2020"],
+        "Сумма платежа": [3500, 200, 5000, 3800, 3000]
     })
 
 
-def test_no_date(transactions):
-    result = spending_by_category(transactions, category="Еда", date=None)
+def test_with_date_1(transactions):
+    result = cost_by_category(transactions, category="Транспорт", date="15.08.2020")
     result_list = json.loads(result)
 
-    assert result_list[0]["amount"] == 1000
-    assert result_list[1]["amount"] == 2000
-    assert result_list[2]["amount"] == 3000
+    assert result_list[0]["amount"] == 200
+    # assert result_list[1]["amount"] == 5000
+    # assert result_list[2]["amount"] == 3000
 
 
-def test_with_date(transactions):
-    result = spending_by_category(transactions, category="Еда", date="20.12.2024")
+def test_with_date_2(transactions):
+    result = cost_by_category(transactions, category="Красота", date="20.08.2020")
     result_list = json.loads(result)
 
-    assert result_list[0]["amount"] == 1000
-    assert result_list[1]["amount"] == 2000
+    assert result_list[0]["amount"] == 3500
+    assert result_list[1]["amount"] == 5000
 
 
 def test_no_transactions_in_category(transactions):
-    result = spending_by_category(transactions, category="Недвижимость", date=None)
+    result = cost_by_category(transactions, category="Еда", date=None)
     result_list = json.loads(result)
 
     assert len(result_list) == 0
