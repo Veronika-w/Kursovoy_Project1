@@ -1,13 +1,12 @@
 import datetime
 import json
-import pandas as pd
-from typing import Optional
-from typing import Any
 import logging
+from typing import Any, Optional
 
-from src.decorators import decorator_spending_by_category
+import pandas as pd
+
+from src.decorators import decorator_cost_by_category
 from src.utils import read_excel_file
-
 
 logging.basicConfig(
     level=logging.DEBUG,
@@ -19,10 +18,8 @@ logging.basicConfig(
 spending_by_category_logger = logging.getLogger()
 
 
-@decorator_spending_by_category
-def spending_by_category(transactions: pd.DataFrame,
-                         category: str,
-                         date: Optional[str] = None) -> Any:
+@decorator_cost_by_category
+def cost_by_category(transactions: pd.DataFrame, category: str, date: Optional[str] = None) -> Any:
     """Функция возвращающая траты за последние 3 месяца по заданной категории"""
 
     final_list = []
@@ -35,17 +32,14 @@ def spending_by_category(transactions: pd.DataFrame,
         date_start = date_obj - datetime.timedelta(days=90)
 
     for index, transaction in transactions.iterrows():
-        if transaction['Категория'] == category:
+        if transaction["Категория"] == category:
 
             if pd.isna(transaction["Дата платежа"]) or isinstance(transaction["Дата платежа"], float):
                 continue
             try:
                 transaction_date = datetime.datetime.strptime(str(transaction["Дата платежа"]), "%d.%m.%Y")
                 if date_start <= transaction_date <= date_start + datetime.timedelta(days=90):
-                    final_list.append({
-                        "date": transaction["Дата платежа"],
-                        "amount": transaction["Сумма платежа"]
-                    })
+                    final_list.append({"date": transaction["Дата платежа"], "amount": transaction["Сумма платежа"]})
             except ValueError:
                 continue
 
@@ -53,4 +47,4 @@ def spending_by_category(transactions: pd.DataFrame,
 
 
 f = pd.DataFrame(read_excel_file("../data/operations.xlsx"))
-print(spending_by_category(f, 'Супермаркеты', '01.10.2020'))
+print(cost_by_category(f, "Транспорт", "01.08.2020"))
