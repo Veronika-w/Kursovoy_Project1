@@ -46,5 +46,5 @@ def cost_by_category(transactions: pd.DataFrame, category: str, date: Optional[s
     return json.dumps(final_list, indent=4, ensure_ascii=False)
 
 
-f = pd.DataFrame(read_excel_file("../data/operations.xlsx"))
-print(cost_by_category(f, "Транспорт", "01.08.2020"))
+# f = pd.DataFrame(read_excel_file("../data/operations.xlsx"))
+# print(cost_by_category(f, "Транспорт", "01.08.2020"))
