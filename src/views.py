@@ -1,5 +1,6 @@
 import json
 import logging
+
 from src.utils import greetings, filter_by_date, read_excel_file, operations_card
 from src.utils import top_five_transactions, currency_rate, currency_stocks, now, get_user_settings
 
@@ -45,4 +46,4 @@ def main(user_data: str, stocks: dict, currency: dict) -> str:
     return date_json
 
 
-print(main('2021-10-20', stocks, currency))
+# print(main('2021-10-20', stocks, currency))
