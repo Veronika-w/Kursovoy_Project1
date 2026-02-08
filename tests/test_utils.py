@@ -6,8 +6,16 @@ import pandas as pd
 import pytest
 from dotenv import load_dotenv
 
-from src.utils import (currency_rate, currency_stocks, filter_by_date, get_user_settings, greetings, operations_card,
-                       read_excel_file, top_five_transactions)
+from src.utils import (
+    currency_rate,
+    currency_stocks,
+    filter_by_date,
+    get_user_settings,
+    greetings,
+    operations_card,
+    read_excel_file,
+    top_five_transactions,
+)
 
 load_dotenv()
 API_KEY = os.getenv("API_KEY")

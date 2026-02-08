@@ -1,51 +1,50 @@
 import json
 import logging
-import os
-from json import JSONDecodeError
+from src.utils import greetings, filter_by_date, read_excel_file, operations_card
+from src.utils import top_five_transactions, currency_rate, currency_stocks, date_now, get_user_settings
 
-from src.utils import (currency_rate, currency_stocks, filter_by_date, get_date_time, greetings, operations_card,
-                       top_five_transactions)
 
-logger = logging.getLogger("views")
-log = os.path.join(os.path.dirname(__file__), "..", "logs", "views.log")
-file_handler = logging.FileHandler(
-    os.path.join(os.path.dirname(__file__), "../logs/views.log"),
-    "w",
-    encoding="utf-8",
+logging.basicConfig(
+    level=logging.DEBUG,
+    format="%(asctime)s - %(filename)s - %(levelname)s - %(message)s",
+    filename="../logs/views.log",
+    filemode="w",
 )
-file_formatter = logging.Formatter("%(asctime)s %(levelname)s: %(message)s")
-file_handler.setFormatter(file_formatter)
-logger.addHandler(file_handler)
-logger.setLevel(logging.INFO)
+
+main_logger = logging.getLogger()
+
+my_list = read_excel_file("../data/operations.xlsx")
+user_settings = get_user_settings("../data/user_settings.json")
+stocks = user_settings["user_stocks"]
+currency = user_settings["user_currencies"]
 
 
-def greetings_info(date_time: str) -> str:
-    """Приветствие пользователя в зависимости от его времени суток"""
-    greeting = greetings()
-    time_period = get_date_time(date_time)
-    sorted_df = filter_by_date(
-        os.path.join(os.path.dirname(__file__), "../data/operations.xlsx"),
-        time_period,
-    )
-    cards = operations_card(sorted_df)
-    top_transactions = top_five_transactions(sorted_df)
-    currency_rates = currency_rate()
-    stock_prices = currency_stocks()
-    try:
-        logger.info("получение и формирование json-ответа")
-        data = {
+def main(user_data: str, stocks: dict, currency: dict) -> str:
+    """Функция создающая JSON ответ для страницы главная"""
+    main_logger.info("Начало работы функции main")
+    final_list = filter_by_date(user_data, my_list)
+    greeting = greetings(date_now)
+    cards = operations_card(final_list)
+    top_trans = top_five_transactions(final_list)
+    stocks_prices = currency_stocks(stocks)
+    currency_r = currency_rate(currency)
+    main_logger.info("Формирование JSON ответа")
+    result = [
+        {
             "greeting": greeting,
             "cards": cards,
-            "top_transactions": top_transactions,
-            "currency_rates": currency_rates,
-            "stock_prices": stock_prices,
+            "top_transactions": top_trans,
+            "currency_rates": currency_r,
+            "stock_prices": stocks_prices,
         }
+    ]
+    date_json = json.dumps(
+        result,
+        indent=4,
+        ensure_ascii=False,
+    )
+    main_logger.info("Завершение работы функции main")
+    return date_json
 
-        json_data = json.dumps(data, ensure_ascii=False, indent=4)
 
-        logger.info("успешно сформирован ответ")
-        return json_data
-
-    except JSONDecodeError:
-        logger.error("Произошла ошибка кодирования")
-        return "ошибка формирования ответа"
+print(main("2020-08-01", stocks, currency))

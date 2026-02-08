@@ -182,18 +182,22 @@ def get_user_settings(path: str) -> list:
 
 def currency_rate(currency: dict) -> list[dict]:
     """Функция, которая выводит информацию о курсах валют"""
-    base = "RUB"
-    url = f"https://api.apilayer.com/exchangerates_data/latest?symbols={currency}&base={base}"
+    try:
+        base = "RUB"
+        url = f"https://api.apilayer.com/exchangerates_data/latest?symbols={currency}&base={base}"
 
-    headers = {"apikey": API_KEY}
-    currency_rates = []
-    currency_rate_logger.info("Начало работы функции с информацией о курсе валют")
-    response = requests.request("GET", url, headers=headers, data={})
-    for key, value in response.json().get("rates").items():
-        currency_rates.append({"currency": key, "rates": round(1 / value, 2)})
-        currency_rate_logger.info("Создание списка словарей с данными о курсе валют")
-    currency_rate_logger.info("Конец работы функции с информацией о курсе валют")
-    return currency_rates
+        headers = {"apikey": API_KEY}
+        currency_rates = []
+        currency_rate_logger.info("Начало работы функции с информацией о курсе валют")
+        response = requests.request("GET", url, headers=headers, data={})
+        for key, value in response.json().get("rates").items():
+            currency_rates.append({"currency": key, "rates": round(1 / value, 2)})
+            currency_rate_logger.info("Создание списка словарей с данными о курсе валют")
+        currency_rate_logger.info("Конец работы функции с информацией о курсе валют")
+        return currency_rates
+    except Exception as e:
+        print(f"Ошибка конвертации: {e}")
+        return 0.0
 
 
 # if __name__ == '__main__':
