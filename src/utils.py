@@ -1,15 +1,15 @@
 import datetime
-from typing import Any
+import json
+import logging
+import os
+import pprint
 from json.decoder import JSONDecodeError
+from typing import Any
+
 import finnhub
 import pandas as pd
-import pprint
 import requests
-import json
-import os
 from dotenv import load_dotenv
-import logging
-
 
 logging.basicConfig(
     level=logging.DEBUG,
@@ -55,6 +55,14 @@ def greetings(date_now: datetime) -> str:
 
 # greeting = greetings(now)
 # print(greeting)
+
+
+def get_date_time(date_time: str, date_format: str = "%Y-%m-%d %H:%M:%S") -> list[str]:
+    """Меняет формат строки и фильтрует от начала месяца до указанного числа"""
+    dt = datetime.strptime(date_time, date_format)
+    month_start = dt.replace(day=1)
+
+    return [month_start.strftime("%d.%m.%Y %H:%M:%S"), dt.strftime("%d.%m.%Y %H:%M:%S")]
 
 
 def read_excel_file(excel_path: str) -> list[dict]:
@@ -154,13 +162,6 @@ def top_five_transactions(my_list: list) -> list[dict]:
 # f = pd.DataFrame(read_excel_file("../data/operations.xlsx"))
 # print(top_five_transactions(f))
 
-# with open('../data/user_settings.json', 'r', encoding='utf-8') as file:
-#     json_data = json.load(file)
-#
-# values_to_request = ", ".join(json_data ["user_currencies"])
-# values_stocks_to_request = (json_data ["user_stocks"])
-# print(values_to_request)
-
 
 def get_user_settings(path: str) -> list:
     """Функция принимает на вход путь до JSON-файла и возвращает список словарей с данными об валютах и акциях"""
@@ -196,6 +197,9 @@ def currency_rate(currency: dict) -> list[dict]:
 
 
 # if __name__ == '__main__':
+#     with open('../data/user_settings.json', 'r', encoding='utf-8') as file:
+#         json_data = json.load(file)
+#     values_to_request = ", ".join(json_data ["user_currencies"])
 #     print(currency_rate(values_to_request))
 
 
@@ -215,4 +219,7 @@ def currency_stocks(stocks: dict) -> list[dict]:
 
 
 # if __name__ == '__main__':
-#     print(currency_stocks(get_user_settings()))
+#     with open('../data/user_settings.json', 'r', encoding='utf-8') as file:
+#         json_data = json.load(file)
+#     values_stocks_to_request = (json_data ["user_stocks"])
+#     print(currency_stocks(values_stocks_to_request))

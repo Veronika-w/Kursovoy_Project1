@@ -1,12 +1,13 @@
-import pytest
-import pandas as pd
-from unittest.mock import patch, Mock, mock_open
 import os
-from dotenv import load_dotenv
 from datetime import datetime
-from src.utils import greetings, filter_by_date, read_excel_file, operations_card
-from src.utils import top_five_transactions, currency_rate, currency_stocks, get_user_settings
+from unittest.mock import Mock, mock_open, patch
 
+import pandas as pd
+import pytest
+from dotenv import load_dotenv
+
+from src.utils import (currency_rate, currency_stocks, filter_by_date, get_user_settings, greetings, operations_card,
+                       read_excel_file, top_five_transactions)
 
 load_dotenv()
 API_KEY = os.getenv("API_KEY")
