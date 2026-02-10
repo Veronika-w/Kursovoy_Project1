@@ -200,11 +200,11 @@ def currency_rate(currency: dict) -> list[dict]:
         return 0.0
 
 
-# if __name__ == '__main__':
-#     with open('../data/user_settings.json', 'r', encoding='utf-8') as file:
-#         json_data = json.load(file)
-#     values_to_request = ", ".join(json_data ["user_currencies"])
-#     print(currency_rate(values_to_request))
+if __name__ == '__main__':
+    with open('../data/user_settings.json', 'r', encoding='utf-8') as file:
+        json_data = json.load(file)
+    values_to_request = ", ".join(json_data ["user_currencies"])
+    print(currency_rate(values_to_request))
 
 
 def currency_stocks(stocks: dict) -> list[dict]:
