@@ -47,4 +47,4 @@ def main(user_data: str, stocks: dict, currency: dict) -> str:
     return date_json
 
 
-print(main("2020-08-01", stocks, currency))
+print(main("2021-10-01", stocks, currency))

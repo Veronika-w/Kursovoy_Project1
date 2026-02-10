@@ -11,7 +11,7 @@ logging.basicConfig(
     filemode="w",
 )
 
-cashback_categories_logger = logging.getLogger()
+cashback_categories_logger = logging.getLogger(__name__)
 
 operations = read_excel_file("../data/operations.xlsx")
 

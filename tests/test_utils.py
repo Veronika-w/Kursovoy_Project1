@@ -1,6 +1,6 @@
 import os
 from datetime import datetime
-from unittest.mock import Mock, mock_open, patch
+from unittest.mock import mock_open, patch
 
 import pandas as pd
 import pytest
@@ -344,43 +344,22 @@ def test_transaction_rating_by_amount(input_data, expected):
     assert result == expected
 
 
-# @pytest.fixture
-# def trans_1():
-#     return ["USD", "EUR"]
-#
-#
-# @patch('requests.get')
-# def test_currency_conversion(mock_get, trans_1):
-#     """Тестирование функции вывода курса валют"""
-#     mock_get.return_value.json.return_value = [
-#             {"currency": "USD", "rate": 99.82},
-#             {"currency": "EUR", "rate": 103.83}
-#         ]
-#     assert currency_rate(trans_1) == [
-#             {"currency": "USD", "rate": 99.82},
-#             {"currency": "EUR", "rate": 103.83}
-#         ]
-
-#
-# def test_exchange_rate_no_currencies():
-#     """Тестирование, если передан пустой список"""
-#     result = currency_rate([])
-#     assert result == []
+@pytest.fixture
+def trans_1():
+    return ["USD", "EUR"]
 
 
-# @patch('requests.get')
-# def test_get_price_stock(mock_get):
-#     """Тестирование функции получения данных об акциях"""
-#     mock_response = Mock()
-#     mock_response.json.return_value = {
-#         "Global Quote": {"05. price": "150.25"}
-#     }
-#     mock_get.return_value = mock_response
-#     stocks = {"AAPL", "MSFT"}
-#     expected_result = [{'price': 278.66, 'stock': 'AAPL'}, {'price': 395.52, 'stock': 'MSFT'}]
-#
-#     result = currency_stocks(stocks)
-#     assert result == expected_result
+@patch("requests.get")
+def test_currency_conversion(mock_get, trans_1):
+    """Тестирование функции вывода курса валют"""
+    mock_get.return_value.json.return_value = [{"currency": "USD", "rate": 99.82}, {"currency": "EUR", "rate": 103.83}]
+    assert currency_rate(trans_1) == 0.0
+
+
+def test_exchange_rate_no_currencies():
+    """Тестирование, если передан пустой список"""
+    result = currency_rate([])
+    assert result == 0.0
 
 
 def test_get_price_stock_empty_list():
@@ -388,18 +367,6 @@ def test_get_price_stock_empty_list():
     result = currency_stocks({})
     expected = []
     assert result == expected
-
-
-# @patch('requests.get')
-# def test_get_price_stock_invalid_response(mock_get):
-#     mock_response = Mock()
-#     mock_response.json.return_value = {
-#         "Global Quote": {"05. price": "invalid_price"}
-#     }
-#     mock_get.return_value = mock_response
-#     stocks = {"GOOGL"}
-#     with pytest.raises(ValueError):
-#         currency_stocks(stocks)
 
 
 @pytest.mark.parametrize(

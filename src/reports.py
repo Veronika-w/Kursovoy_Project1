@@ -12,7 +12,7 @@ logging.basicConfig(
     filemode="w",
 )
 
-cost_by_category_logger = logging.getLogger()
+cost_by_category_logger = logging.getLogger(__name__)
 
 
 def decorator_cost_by_category(func: Any) -> Any:
