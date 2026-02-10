@@ -18,14 +18,14 @@ def transactions():
 
 
 def test_with_date_1(transactions):
-    result = cost_by_category(transactions, category="Транспорт", date="15.08.2020")
+    result = cost_by_category(transactions, category="Транспорт", date="2020-08-15")
     result_list = json.loads(result)
 
     assert result_list[0]["amount"] == 200
 
 
 def test_with_date_2(transactions):
-    result = cost_by_category(transactions, category="Красота", date="20.08.2020")
+    result = cost_by_category(transactions, category="Красота", date="2020-08-20")
     result_list = json.loads(result)
 
     assert result_list[0]["amount"] == 3500
