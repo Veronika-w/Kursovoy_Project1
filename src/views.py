@@ -1,8 +1,8 @@
 import json
 import logging
-from src.utils import greetings, filter_by_date, read_excel_file, operations_card
-from src.utils import top_five_transactions, currency_rate, currency_stocks, date_now, get_user_settings
 
+from src.utils import (currency_rate, currency_stocks, date_now, filter_by_date, get_user_settings, greetings,
+                       operations_card, read_excel_file, top_five_transactions)
 
 logging.basicConfig(
     level=logging.DEBUG,

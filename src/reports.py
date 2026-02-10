@@ -5,9 +5,6 @@ from typing import Any, Optional
 
 import pandas as pd
 
-from src.decorators import decorator_cost_by_category
-from src.utils import read_excel_file
-
 logging.basicConfig(
     level=logging.DEBUG,
     format="%(asctime)s - %(filename)s - %(levelname)s - %(message)s",
@@ -15,7 +12,23 @@ logging.basicConfig(
     filemode="w",
 )
 
-spending_by_category_logger = logging.getLogger()
+cost_by_category_logger = logging.getLogger()
+
+
+def decorator_cost_by_category(func: Any) -> Any:
+    """Логирует результат функции в файл по умолчанию cost_by_category.json"""
+
+    def wrapper(*args: Any, **kwargs: Any) -> Any:
+        result = func(*args, **kwargs)
+        try:
+            with open("cost_by_category.json", "w", encoding="utf-8") as f:
+                cost_by_category.info("Запись отчёта в файл")
+                json.dump(result, f, ensure_ascii=False, indent=4)
+        except Exception as e:
+            cost_by_category_logger.error(f"Произошла ошибка при записи в файл: {e}")
+        return result
+
+    return wrapper
 
 
 @decorator_cost_by_category
@@ -27,8 +40,7 @@ def cost_by_category(transactions: pd.DataFrame, category: str, date: Optional[s
     if date is None:
         date_start = datetime.datetime.now() - datetime.timedelta(days=90)
     else:
-        day, month, year = date.split(".")
-        date_obj = datetime.datetime(int(year), int(month), int(day))
+        date_obj = datetime.datetime.strptime(date, "%Y-%m-%d")
         date_start = date_obj - datetime.timedelta(days=90)
 
     for index, transaction in transactions.iterrows():
@@ -44,7 +56,3 @@ def cost_by_category(transactions: pd.DataFrame, category: str, date: Optional[s
                 continue
 
     return json.dumps(final_list, indent=4, ensure_ascii=False)
-
-
-# f = pd.DataFrame(read_excel_file("../data/operations.xlsx"))
-# print(cost_by_category(f, "Транспорт", "01.08.2020"))

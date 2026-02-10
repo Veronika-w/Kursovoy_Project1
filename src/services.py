@@ -1,6 +1,5 @@
 import json
 import logging
-import pprint
 from datetime import datetime
 
 from src.utils import read_excel_file
@@ -17,7 +16,7 @@ cashback_categories_logger = logging.getLogger()
 operations = read_excel_file("../data/operations.xlsx")
 
 
-def cashback_categories(operations, year, month) -> str:
+def cashback_categories(operations: list, year: int, month: int) -> str:
     """Функция анализирует, сколько на каждой категории можно заработать кешбэка в указанном месяце года"""
     cashback_categories_logger.info("Начало работы функции анализа кешбэка")
 
@@ -51,6 +50,3 @@ def cashback_categories(operations, year, month) -> str:
     sorted_cashback = dict(sorted(cashback_distribution.items(), key=lambda item: item[1], reverse=True))
     cashback_categories_logger.info("Конец работы функции")
     return json.dumps(sorted_cashback, ensure_ascii=False)
-
-
-# pprint.pprint(cashback_categories(operations,2020, 8))

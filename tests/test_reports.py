@@ -10,7 +10,7 @@ from src.reports import cost_by_category
 def transactions():
     return pd.DataFrame(
         {
-            "Категория": ["Красота", "Транспорт", "Красота", "ЖКХ", "Красота"],
+            "Категория": ["Красота", "Транспорт", "Красота", "Транспорт", "Красота"],
             "Дата платежа": ["10.08.2020", "15.08.2020", "20.08.2020", "nan", "23.08.2020"],
             "Сумма платежа": [3500, 200, 5000, 3800, 3000],
         }
@@ -22,8 +22,6 @@ def test_with_date_1(transactions):
     result_list = json.loads(result)
 
     assert result_list[0]["amount"] == 200
-    # assert result_list[1]["amount"] == 5000
-    # assert result_list[2]["amount"] == 3000
 
 
 def test_with_date_2(transactions):
